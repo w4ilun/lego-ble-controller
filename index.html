@@ -16,14 +16,17 @@
 </head>
 <body>
 	<button id="connect">Connect</button>
+	<input id="m1" type="range" min="-255" max="255" step="1" />
 	<script>
 		//BLE
 		let service        	= '0000ffe0-0000-1000-8000-00805f9b34fb';
 		let characteristic 	= '0000ffe1-0000-1000-8000-00805f9b34fb';
 		let byteLength		= 20;
+		let characteristicInstance;
 
 		window.onload = () => {
 			document.getElementById('connect').onclick = connectBLE;
+			document.getElementById('m1').onchange = updateSpeed;
 		}
 
 		function connectBLE(){
@@ -33,10 +36,8 @@
 			.then(server => server.getPrimaryService(service))
 			.then(service => service.getCharacteristic(characteristic))
 			.then(characteristic => {
+				characteristicInstance = characteristic;
   				return characteristic.writeValue(str2ab("100#100#100#100"));
-			})
-			.then(_ => {
-				console.log('Sent');
 			})
 			.catch(error => { console.log(error); });
 
@@ -64,6 +65,15 @@
 				bufView[i] = str.charCodeAt(i);
 			}
 			return buf;
+		}
+
+		function writeChar(str){
+			characteristicInstance.writeValue();
+		}
+
+		function updateSpeed(){
+			console.log(this.value);
+			//writeChar("#0#0#0");
 		}
 	</script>
 </body>
