@@ -57,8 +57,7 @@
 
 		function updateSpeed(){
 			console.log(this.value);
-			let value = new Uint8Array([100]);
-			characteristicInstance.writeValue(value);
+			writeChar(this.value+"#0#0#0");
 		}
 	</script>
 </body>
