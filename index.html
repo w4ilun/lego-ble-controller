@@ -31,18 +31,10 @@
 			navigator.bluetooth.requestDevice({ filters: [{ services: [service] }] })
 			.then(device => device.gatt.connect())
 			.then(server => server.getPrimaryService(service))
-			.then(service => {
-				alert(service);
-				service.getCharacteristic(characteristic);
+			.then(service => service.getCharacteristic(characteristic))
+			.then(characteristic => {
+  				return characteristic.writeValue(str2ab("100#100#100#100"));
 			})
-			// .then(characteristic => {
-			// 	alert(characteristic);
-			// 	// return characteristic.startNotifications()
-			// 	// .then(_ => {
-			// 	// 	characteristic.addEventListener('characteristicvaluechanged',
-			//  //                        handleCharacteristicValueChanged);
-			// 	// });
-			// })
 			// .then(_ => {
 			// 	console.log('Notifications have been started.');
 			// })
@@ -63,6 +55,15 @@
 			// 	pitch 		= parseFloat(imu[1]);
 			// 	yaw 		= parseFloat(imu[2]);
 			// }
+		}
+
+		function str2ab(str){
+			var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+			var bufView = new Uint16Array(buf);
+			for (var i=0, strLen=str.length; i < strLen; i++) {
+				bufView[i] = str.charCodeAt(i);
+			}
+			return buf;
 		}
 	</script>
 </body>
