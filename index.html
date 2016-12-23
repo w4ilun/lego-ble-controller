@@ -68,7 +68,9 @@
 		}
 
 		function writeChar(str){
-			characteristic.writeValue(str2ab("100#0#0#0"));
+			var buff = str2ab("100#0#0#0");
+			console.log(buff);
+			characteristic.writeValue(buff);
 		}
 
 		function updateSpeed(){
