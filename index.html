@@ -7,10 +7,8 @@
 			font-family: Helvetica;
 			text-align:center;
 		}
-		ol{
-			width:400px;
-			text-align:left;
-			margin:0 auto;
+		input[type=range]{
+			-webkit-appearance: slider-vertical;
 		}
 	</style>
 </head>
@@ -19,8 +17,8 @@
 	<input id="m1" type="range" min="-255" max="255" step="1" />
 	<script>
 		//BLE
-		let service        	= '0000ffe0-0000-1000-8000-00805f9b34fb';
-		let characteristic 	= '0000ffe1-0000-1000-8000-00805f9b34fb';
+		let service        	= '0000ffe0-0000-1000-8000-00805f9b34fb'; //HM-10 service UUID
+		let characteristic 	= '0000ffe1-0000-1000-8000-00805f9b34fb'; //HM-10 characteristic UUID
 		let byteLength		= 20;
 		let characteristicInstance;
 
@@ -37,7 +35,7 @@
 			.then(service => service.getCharacteristic(characteristic))
 			.then(characteristic => {
 				characteristicInstance = characteristic;
-  				return characteristic.writeValue(str2ab("0#0#0#0"));
+  				return characteristic.writeValue(str2ab("0#0#0#0")); // # is the deliminator , integer range -255 to 255 , first position is channel 1, etc.
 			})
 			.catch(error => { console.log(error); });
 		}
@@ -51,13 +49,10 @@
 			return buf;
 		}
 
-		function writeChar(str){
-			characteristicInstance.writeValue(str2ab(str));
-		}
-
 		function updateSpeed(){
 			console.log(this.value);
-			writeChar(this.value+"#0#0#0");
+			let str = this.value+"#0#0#0";
+			characteristicInstance.writeValue(str2ab(str));
 		}
 	</script>
 </body>
