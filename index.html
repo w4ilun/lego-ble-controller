@@ -52,14 +52,13 @@
 		}
 
 		function writeChar(str){
-			console.log(str);
-			var buff = str2ab("100#0#0#0");
-			characteristicInstance.writeValue(buff);
+			characteristicInstance.writeValue(str2ab(str));
 		}
 
 		function updateSpeed(){
 			console.log(this.value);
-			writeChar(this.value+"#0#0#0");
+			let value = new Uint8Array([100]);
+			characteristicInstance.writeValue(value);
 		}
 	</script>
 </body>
