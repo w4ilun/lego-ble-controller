@@ -37,7 +37,7 @@
 			.then(service => service.getCharacteristic(characteristic))
 			.then(characteristic => {
 				characteristicInstance = characteristic;
-  				return characteristic.writeValue(str2ab("100#100#100#100"));
+  				return characteristic.writeValue(str2ab("0#0#0#0"));
 			})
 			.catch(error => { console.log(error); });
 
@@ -68,7 +68,7 @@
 		}
 
 		function writeChar(str){
-			characteristicInstance.writeValue(str);
+			characteristicInstance.writeValue(str2ab(str));
 		}
 
 		function updateSpeed(){
