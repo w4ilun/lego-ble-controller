@@ -68,12 +68,12 @@
 		}
 
 		function writeChar(str){
-			characteristicInstance.writeValue();
+			characteristicInstance.writeValue(str);
 		}
 
 		function updateSpeed(){
 			console.log(this.value);
-			//writeChar("#0#0#0");
+			writeChar(this.value+"#0#0#0");
 		}
 	</script>
 </body>
