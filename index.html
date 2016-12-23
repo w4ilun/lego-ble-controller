@@ -9,6 +9,7 @@
 		}
 		input[type=range]{
 			-webkit-appearance: slider-vertical;
+			margin: 0 100px;
 		}
 	</style>
 </head>
@@ -16,6 +17,7 @@
 	<button id="connect">Connect</button>
 	<br>
 	<input id="m1" type="range" min="-255" max="255" step="1" />
+	<input id="m2" type="range" min="-255" max="255" step="1" />
 	<script>
 		//BLE
 		let service        	= '0000ffe0-0000-1000-8000-00805f9b34fb'; //HM-10 service UUID
@@ -23,9 +25,14 @@
 		let byteLength		= 20;
 		let characteristicInstance;
 
+		let connectBtn = document.getElementById('connect');
+		let m1slider = document.getElementById('m1');
+		let m2slider = document.getElementById('m2');
+
 		window.onload = () => {
-			document.getElementById('connect').onclick = connectBLE;
-			document.getElementById('m1').onchange = updateSpeed;
+			connectBtn.onclick = connectBLE;
+			m1slider.oninput = updateSpeed;
+			m2slider.oninput = updateSpeed;
 		}
 
 		function connectBLE(){
@@ -51,8 +58,8 @@
 		}
 
 		function updateSpeed(){
-			console.log(this.value);
-			let str = this.value+"#0#0#0";
+			let str = m1slider.value+"#"+m2slider.value+"#0#0";
+			console.log(str);
 			characteristicInstance.writeValue(str2ab(str));
 		}
 	</script>
