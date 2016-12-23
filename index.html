@@ -40,22 +40,6 @@
   				return characteristic.writeValue(str2ab("0#0#0#0"));
 			})
 			.catch(error => { console.log(error); });
-
-			// function handleCharacteristicValueChanged(event){
-			// 	var value 	= event.target.value;
-			// 	var str 	= "";
-
-			// 	//concat and split string for roll, pitch, yaw (e.g. "-0.58,2.20,328.76")
-			// 	for(var i=0; i<byteLength; i++){
-			// 		str = str + String.fromCharCode(value.getUint8(i));
-			// 	}
-			// 	var imu 	= str.split(',');
-
-			// 	//update globals
-			// 	roll 		= parseFloat(imu[0]);
-			// 	pitch 		= parseFloat(imu[1]);
-			// 	yaw 		= parseFloat(imu[2]);
-			// }
 		}
 
 		function str2ab(str){
@@ -68,8 +52,8 @@
 		}
 
 		function writeChar(str){
+			console.log(str);
 			var buff = str2ab("100#0#0#0");
-			console.log(buff);
 			characteristicInstance.writeValue(buff);
 		}
 
