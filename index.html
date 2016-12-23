@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Lego BLE Controller</title>
+	<style>
+		body{
+			font-family: Helvetica;
+			text-align:center;
+		}
+		ol{
+			width:400px;
+			text-align:left;
+			margin:0 auto;
+		}
+	</style>
+</head>
+<body>
+	<button id="connect">Connect</button>
+	<script>
+		//BLE
+		let service        	= '0000ffe000001000800000805f9b34fb';
+		let characteristic 	= '0000ffe000001000800000805f9b34fb';
+		let byteLength		= 20;
+
+		window.onload = () => {
+			document.getElementById('connect').onclick = connectBLE;
+		}
+
+		function connectBLE(){
+			//BLE setup. Connect and get service/characteristic notifications
+			navigator.bluetooth.requestDevice({ filters: [{ services: [service] }] })
+			.then(device => device.gatt.connect())
+			.then(server => server.getPrimaryService(service))
+			.then(service => service.getCharacteristic(characteristic))
+			.then(characteristic => {
+				alert(characteristic);
+				// return characteristic.startNotifications()
+				// .then(_ => {
+				// 	characteristic.addEventListener('characteristicvaluechanged',
+			 //                        handleCharacteristicValueChanged);
+				// });
+			})
+			// .then(_ => {
+			// 	console.log('Notifications have been started.');
+			// })
+			.catch(error => { console.log(error); });
+
+			// function handleCharacteristicValueChanged(event){
+			// 	var value 	= event.target.value;
+			// 	var str 	= "";
+
+			// 	//concat and split string for roll, pitch, yaw (e.g. "-0.58,2.20,328.76")
+			// 	for(var i=0; i<byteLength; i++){
+			// 		str = str + String.fromCharCode(value.getUint8(i));
+			// 	}
+			// 	var imu 	= str.split(',');
+
+			// 	//update globals
+			// 	roll 		= parseFloat(imu[0]);
+			// 	pitch 		= parseFloat(imu[1]);
+			// 	yaw 		= parseFloat(imu[2]);
+			// }
+		}
+	</script>
+</body>
+</html>
