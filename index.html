@@ -31,15 +31,18 @@
 			navigator.bluetooth.requestDevice({ filters: [{ services: [service] }] })
 			.then(device => device.gatt.connect())
 			.then(server => server.getPrimaryService(service))
-			.then(service => service.getCharacteristic(characteristic))
-			.then(characteristic => {
-				alert(characteristic);
-				// return characteristic.startNotifications()
-				// .then(_ => {
-				// 	characteristic.addEventListener('characteristicvaluechanged',
-			 //                        handleCharacteristicValueChanged);
-				// });
+			.then(service => {
+				alert(service);
+				service.getCharacteristic(characteristic);
 			})
+			// .then(characteristic => {
+			// 	alert(characteristic);
+			// 	// return characteristic.startNotifications()
+			// 	// .then(_ => {
+			// 	// 	characteristic.addEventListener('characteristicvaluechanged',
+			//  //                        handleCharacteristicValueChanged);
+			// 	// });
+			// })
 			// .then(_ => {
 			// 	console.log('Notifications have been started.');
 			// })
