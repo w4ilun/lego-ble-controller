@@ -22,9 +22,10 @@ First attempt at making a Lego BLE contoller.
 * 5 x Lego Power Functions Extension Wire
 
 ###Remote Control App
+![screenshot](screenshot.png)
 * Uses the Web Bluetooth API in Chrome to connect and control the board
 * To use, first enable Web Bluetooth in your Chrome browser (e.g. chrome://flags )
-* Go to https://w4ilun.github.io/lego-ble-controller and click connect
+* Go to https://w4ilun.github.io/lego-ble-controller on your phone or desktop and click connect
 * Feel free to customize the UI with additional controls and adding the remaining channels
 
 ##Control Protocol
