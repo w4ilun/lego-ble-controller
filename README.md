@@ -1,4 +1,4 @@
-##4-channel Bluetooth LE controller for Lego Power Functions
+##4-channel Bluetooth LE controller for Lego Power Functions w/ Web Bluetooth app
 
 First attempt at making a Lego BLE contoller.
 
