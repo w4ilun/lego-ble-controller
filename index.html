@@ -83,6 +83,7 @@
 </head>
 <body>
 	<button id="connect">Connect</button>
+	<button id="fs">fs</button>
 	<br>
 	<input id="m1" type="range" min="-255" max="255" step="1" />
 	<input id="m2" type="range" min="-100" max="100" step="1" /> <!-- Full steering range is -255 to 255 -->
@@ -94,6 +95,7 @@
 		let characteristicInstance;
 
 		let connectBtn = document.getElementById('connect');
+		let connectBtn = document.getElementById('fs');
 		let m1slider = document.getElementById('m1');
 		let m2slider = document.getElementById('m2');
 
@@ -103,10 +105,14 @@
 				connectBtn.disabled = true;
 			}
 			connectBtn.onclick = connectBLE;
+			fs.onclick = fulls;
+		}
+
+		function fulls(){
+			document.body.requestFullscreen();
 		}
 
 		function connectBLE(){
-			document.body.requestFullscreen();
 			//BLE setup. Connect and get service/characteristic notifications
 			navigator.bluetooth.requestDevice({ filters: [{ services: [service] }] })
 			.then(device => device.gatt.connect())
