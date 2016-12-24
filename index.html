@@ -83,7 +83,6 @@
 </head>
 <body>
 	<button id="connect">Connect</button>
-	<button id="goFS">FS</button>
 	<br>
 	<input id="m1" type="range" min="-255" max="255" step="1" />
 	<input id="m2" type="range" min="-100" max="100" step="1" /> <!-- Full steering range is -255 to 255 -->
@@ -104,11 +103,6 @@
 				connectBtn.disabled = true;
 			}
 			connectBtn.onclick = connectBLE;
-
-			var goFS = document.getElementById("goFS");
-  goFS.addEventListener("click", function() {
-      document.body.requestFullscreen();
-  }, false);
 		}
 
 		function connectBLE(){
