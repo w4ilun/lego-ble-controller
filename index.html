@@ -8,6 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">	
 	<style>
+
 		body{
 			font-family: Helvetica;
 			text-align:center;
@@ -15,104 +16,66 @@
 			height:100%;
 		}
 
-input[type=range] {
-  -webkit-appearance: none;
-  width: 100%;
-  margin: 13.8px 0;
-}
-input[type=range]:focus {
-  outline: none;
-}
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
-  border-radius: 1.3px;
-  border: 0.2px solid #010101;
-}
-input[type=range]::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -14px;
-}
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #367ebd;
-}
-input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
-  border-radius: 1.3px;
-  border: 0.2px solid #010101;
-}
-input[type=range]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
-}
-input[type=range]::-ms-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-  background: #2a6495;
-  border: 0.2px solid #010101;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-input[type=range]::-ms-fill-upper {
-  background: #3071a9;
-  border: 0.2px solid #010101;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-input[type=range]::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
-  height: 8.4px;
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: #3071a9;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: #367ebd;
-}
+		/*range slider styles*/
+		input[type=range] {
+			-webkit-appearance: none;
+			width: 100%;
+			margin: 13.8px 0;
+		}
+		input[type=range]:focus {
+			outline: none;
+		}
+		input[type=range]::-webkit-slider-runnable-track {
+			width: 100%;
+			height: 8.4px;
+			cursor: pointer;
+			box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+			background: #3071a9;
+			border-radius: 1.3px;
+			border: 0.2px solid #010101;
+		}
+		input[type=range]::-webkit-slider-thumb {
+			box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+			border: 1px solid #000000;
+			height: 36px;
+			width: 16px;
+			border-radius: 3px;
+			background: #ffffff;
+			cursor: pointer;
+			-webkit-appearance: none;
+			margin-top: -14px;
+		}
+		input[type=range]:focus::-webkit-slider-runnable-track {
+			background: #367ebd;
+		}
 
 		#m1{
 			-webkit-transform:rotate(90deg);
-			width:40%;
+			width:30%;
 			position:absolute;
 			top:50%;
-			left:10px;
+			left:10%;
 		}
 		#m2{
-			width:40%;
+			width:30%;
 			position:absolute;
 			top:50%;
-			right:10px;			
+			right:10%;			
+		}
+
+		#connect{
+			margin-top:10px;
+			width:200px;
+			height:50px;
+			font-size:20px;
+			border-radius:5px;
+			border:5px solid #000;
+			background-color: #FFF;
+			outline: none;
+		}
+
+		#connect:active{
+			border-color:#CCC;
 		}
 	</style>
 </head>
@@ -120,7 +83,7 @@ input[type=range]:focus::-ms-fill-upper {
 	<button id="connect">Connect</button>
 	<br>
 	<input id="m1" type="range" min="-255" max="255" step="1" />
-	<input id="m2" type="range" min="-100" max="100" step="1" />
+	<input id="m2" type="range" min="-100" max="100" step="1" /> <!-- Full steering range is -255 to 255 -->
 	<script>
 		//BLE
 		let service        	= 0xFFE0; //0000ffe0-0000-1000-8000-00805f9b34fb HM-10 service UUID
@@ -133,6 +96,10 @@ input[type=range]:focus::-ms-fill-upper {
 		let m2slider = document.getElementById('m2');
 
 		window.onload = () => {
+			if(!navigator.bluetooth){
+				alert('Your current browser does not support web bluetooth or is not enabled. Please use the latest version of Chrome and enable web bluetooth under chrome://flags');
+				connectBtn.disabled = true;
+			}
 			connectBtn.onclick = connectBLE;
 		}
 
@@ -144,7 +111,7 @@ input[type=range]:focus::-ms-fill-upper {
 			.then(service => service.getCharacteristic(characteristic))
 			.then(characteristic => {
 				characteristicInstance = characteristic;
-				setInterval(updateSpeed,500); //send commands every 500ms
+				setInterval(updateSpeed,200); //send commands every 200ms
   				return characteristic.writeValue(str2ab("0#0#0#0")); // # is the deliminator , integer range -255 to 255 , first position is channel 1, etc.
 			})
 			.catch(error => { console.log(error); });
@@ -152,7 +119,7 @@ input[type=range]:focus::-ms-fill-upper {
 
 		function str2ab(str){
 			var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-			var bufView = new Uint8Array(buf);
+			var bufView = new Uint8Array(buf); //make sure buffer array is of type uint8
 			for (var i=0, strLen=str.length; i < strLen; i++) {
 				bufView[i] = str.charCodeAt(i);
 			}
@@ -160,7 +127,7 @@ input[type=range]:focus::-ms-fill-upper {
 		}
 
 		function updateSpeed(){
-			let str = m1slider.value+"#"+m2slider.value+"#0#0";
+			let str = m1slider.value+"#"+m2slider.value+"#0#0"; //set remaining 2 channels to 0
 			characteristicInstance.writeValue(str2ab(str));
 		}
 
