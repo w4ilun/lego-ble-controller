@@ -53,13 +53,13 @@
 
 		#m1{
 			-webkit-transform:rotate(90deg);
-			width:30%;
+			width:40%;
 			position:absolute;
 			top:50%;
-			left:10%;
+			left:5%;
 		}
 		#m2{
-			width:30%;
+			width:40%;
 			position:absolute;
 			top:50%;
 			right:10%;			
@@ -106,6 +106,7 @@
 		}
 
 		function connectBLE(){
+			document.body.requestFullscreen();
 			//BLE setup. Connect and get service/characteristic notifications
 			navigator.bluetooth.requestDevice({ filters: [{ services: [service] }] })
 			.then(device => device.gatt.connect())
