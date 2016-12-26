@@ -34,8 +34,8 @@
 		#p1,#p2{
 			border:5px solid #CCC;
 			border-radius:50px;
-			width:50px;
-			height:50px;
+			width:150px;
+			height:150px;
 			color:white;
 		}
 		#p1{
@@ -111,7 +111,7 @@
 		function incrementCounter(){
 			this.id[1] == 1 ? (counter = counter + 5) : (counter = counter - 5);
 			console.log(counter);
-			if(counter > 100 || counter < -100){
+			if(counter > 200 || counter < -200){
 				gameOver();
 			}else{
 				characteristicInstance.writeValue(str2ab(counter+'#0#0#0'));
