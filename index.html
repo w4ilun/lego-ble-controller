@@ -38,9 +38,9 @@
 		input[type=range]::-webkit-slider-thumb {
 			box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
 			border: 1px solid #000000;
-			height: 36px;
-			width: 16px;
-			border-radius: 3px;
+			border-radius:50px;
+			height: 50px;
+			width: 50px;
 			background: #ffffff;
 			cursor: pointer;
 			-webkit-appearance: none;
@@ -87,18 +87,18 @@
 	<input id="m2" type="range" min="-100" max="100" step="1" /> <!-- Full steering range is -255 to 255 -->
 	<script>
 		//BLE
-		let service        	= 0xFFE0; //0000ffe0-0000-1000-8000-00805f9b34fb HM-10 service UUID
-		let characteristic 	= 0xFFE1; //0000ffe1-0000-1000-8000-00805f9b34fb HM-10 characteristic UUID
-		let byteLength		= 20;
+		const service        	= 0xFFE0; //0000ffe0-0000-1000-8000-00805f9b34fb HM-10 service UUID
+		const characteristic 	= 0xFFE1; //0000ffe1-0000-1000-8000-00805f9b34fb HM-10 characteristic UUID
+		const byteLength		= 20;
 		let characteristicInstance;
 
 		let connectBtn = document.getElementById('connect');
-		let m1slider = document.getElementById('m1');
-		let m2slider = document.getElementById('m2');
+		let m1slider   = document.getElementById('m1');
+		let m2slider   = document.getElementById('m2');
 
 		window.onload = () => {
 			if(!navigator.bluetooth){
-				alert('Your current browser does not support web bluetooth or is not enabled. Please use the latest version of Chrome and enable web bluetooth under chrome://flags');
+				alert('Your current browser does not support web bluetooth or is not enabled. Please use the latest version of Chrome and enable Web Bluetooth under chrome://flags');
 				connectBtn.disabled = true;
 			}
 			connectBtn.onclick = connectBLE;
@@ -113,15 +113,15 @@
 			.then(characteristic => {
 				characteristicInstance = characteristic;
 				setInterval(updateSpeed,100); //send commands every 100ms
-  				return characteristic.writeValue(str2ab("0#0#0#0")); // # is the deliminator , integer range -255 to 255 , first position is channel 1, etc.
+  				return characteristic.writeValue(str2ab("0#0#0#0")); //set all channels to 0
 			})
 			.catch(error => { console.log(error); });
 		}
 
 		function str2ab(str){
-			var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-			var bufView = new Uint8Array(buf); //make sure buffer array is of type uint8
-			for (var i=0, strLen=str.length; i < strLen; i++) {
+			let buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+			let bufView = new Uint8Array(buf); //make sure buffer array is of type uint8
+			for (let i=0, strLen=str.length; i < strLen; i++) {
 				bufView[i] = str.charCodeAt(i);
 			}
 			return buf;
