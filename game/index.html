@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pie Game</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="mobile-web-app-capable" content="yes">	
+	<style>
+		body{
+			font-family: Helvetica;
+			text-align:center;
+			width:100%;
+			height:100%;
+			overflow-x: hidden; 
+			overflow-y: hidden;			
+		}
+
+		#connect,#start{
+			margin-top:10px;
+			width:200px;
+			height:50px;
+			font-size:20px;
+			border-radius:5px;
+			border:5px solid #000;
+			background-color: #FFF;
+			outline: none;
+		}
+
+		#connect:active,#start:active{
+			border-color:#CCC;
+		}
+		#p1,#p2{
+			border:5px solid #CCC;
+			border-radius:50px;
+			width:50px;
+			height:50px;
+			color:white;
+		}
+		#p1{
+			position:absolute;
+			left:10px;
+			top:50%;
+			background-color: blue;
+		}
+		#p2{
+			position:absolute;
+			right:10px;
+			top:50%;
+			background-color: red;
+		}
+	</style>
+</head>
+<body>
+	<button id="connect">Connect</button>
+	<br>
+	<button id="start">New Game</button>
+	<button id="p1">P1</button>
+	<button id="p2">P2</button>
+	<script>
+		//BLE
+		const service        	= 0xFFE0; //0000ffe0-0000-1000-8000-00805f9b34fb HM-10 service UUID
+		const characteristic 	= 0xFFE1; //0000ffe1-0000-1000-8000-00805f9b34fb HM-10 characteristic UUID
+		const byteLength		= 20;
+		let characteristicInstance;
+		let counter = 0;
+
+		let connectBtn = document.getElementById('connect');
+		let p1Btn   = document.getElementById('p1');
+		let p2Btn   = document.getElementById('p2');
+		let startBtn   = document.getElementById('start')
+
+		window.onload = () => {
+			if(!navigator.bluetooth){
+				alert('Your current browser does not support web bluetooth or is not enabled. Please use the latest version of Chrome and enable Web Bluetooth under chrome://flags');
+				connectBtn.disabled = true;
+			}
+
+			p1Btn.disabled = true;
+			p2Btn.disabled = true;
+
+			connectBtn.onclick = connectBLE;
+			p1Btn.onclick = incrementCounter;
+			p2Btn.onclick = incrementCounter;
+			startBtn.onclick = startGame;
+		}
+
+		function connectBLE(){
+			//BLE setup. Connect and get service/characteristic notifications
+			navigator.bluetooth.requestDevice({ filters: [{ services: [service] }] })
+			.then(device => device.gatt.connect())
+			.then(server => server.getPrimaryService(service))
+			.then(service => service.getCharacteristic(characteristic))
+			.then(characteristic => {
+				characteristicInstance = characteristic;
+  				return characteristic.writeValue(str2ab("0#0#0#0")); //set all channels to 0
+			})
+			.catch(error => { console.log(error); });
+		}
+
+		function str2ab(str){
+			let buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+			let bufView = new Uint8Array(buf); //make sure buffer array is of type uint8
+			for (let i=0, strLen=str.length; i < strLen; i++) {
+				bufView[i] = str.charCodeAt(i);
+			}
+			return buf;
+		}
+
+		function incrementCounter(){
+			this.id[1] == 1 ? (counter = counter + 5) : (counter = counter - 5);
+			console.log(counter);
+			if(counter > 100 || counter < -100){
+				gameOver();
+			}else{
+				characteristicInstance.writeValue(str2ab(counter+'#0#0#0'));
+			}
+		}
+
+		function startGame(){
+			let count = 5;
+			(function countDown(){
+				startBtn.innerHTML = count;
+				setTimeout(function(){
+					count--;
+					count > 0 ? countDown() : go();
+				},1000);
+			})();
+			function go(){
+				startBtn.innerHTML = 'Start!';
+				startBtn.disabled = true;
+				p1Btn.disabled = false;
+				p2Btn.disabled = false;
+			}
+		}
+
+		function gameOver(){
+			p1Btn.disabled = true;
+			p2Btn.disabled = true;
+			let winner = counter > 0 ? 1 : 2;
+			alert('Gamer Over! Player ' + winner + 'Wins!');
+			setTimeout(function(){
+				startBtn.disabled = false;
+				startBtn.innerHTML = 'New Game';
+				counter = 0;
+				characteristicInstance.writeValue(str2ab('0#0#0#0'));
+			},3000);
+		}
+		
+	</script>
+</body>
+</html>
