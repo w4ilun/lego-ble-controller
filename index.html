@@ -129,6 +129,7 @@
 
 		function updateSpeed(){
 			let str = m1slider.value+"#"+m2slider.value+"#0#0"; //set remaining 2 channels to 0
+			console.log(str);
 			characteristicInstance.writeValue(str2ab(str));
 		}
 		
